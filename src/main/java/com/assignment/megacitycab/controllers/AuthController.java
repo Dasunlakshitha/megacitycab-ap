@@ -19,4 +19,13 @@ public class AuthController {
     public String showLoginPage() {
         return "login";  // This maps to /WEB-INF/views/login.jsp
     }
+
+    @GetMapping("/dashboard")
+    public String showDashboardPage() {
+        return "dashboard";  // This maps to /WEB-INF/views/index.jsp
+    }
+    @GetMapping("/user-login")
+    public String showUserLoginPage() {
+        return "user-login";  // This maps to /WEB-INF/views/index.jsp
+    }
 }
