@@ -5,6 +5,6 @@
 </head>
 <body>
 <h1>Welcome to Mega City Cab</h1>
-<a href="login.jsp">Login</a> | <a href="register.jsp">Register</a>
+<a href="login">Login</a> | <a href="register">Register</a>
 </body>
 </html>
