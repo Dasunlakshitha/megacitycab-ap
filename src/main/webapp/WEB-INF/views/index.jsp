@@ -1,52 +1,43 @@
-<%--
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
-    <title>Mega City Cab</title>
+    <title>Booking Page</title>
 </head>
 <body>
-<h1>Welcome to Mega City Cab</h1>
-<a href="login">Login</a> | <a href="register">Register</a>
+<h2>Welcome to Mega City Cab Booking System</h2>
+
+<!-- Display existing bookings -->
+<h3>Existing Bookings:</h3>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Pickup</th>
+        <th>Drop</th>
+        <th>Fare</th>
+    </tr>
+    <c:forEach var="booking" items="${bookings}">
+        <tr>
+            <td>${booking.id}</td>
+            <td>${booking.customerName}</td>
+            <td>${booking.pickupLocation}</td>
+            <td>${booking.dropLocation}</td>
+            <td>${booking.fare}</td>
+        </tr>
+    </c:forEach>
+</table>
+
+<!-- Booking form -->
+<form action="/api/bookings" method="post">
+    <label>Name:</label> <input type="text" name="customerName"><br>
+    <label>Pickup:</label> <input type="text" name="pickupLocation"><br>
+    <label>Drop:</label> <input type="text" name="dropLocation"><br>
+    <label>Fare:</label> <input type="text" name="fare"><br>
+    <button type="submit">Book Now</button>
+</form>
+
 </body>
 </html>
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Mega City Cab - Booking</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="bg-light">
-<%@ include file="navbar.jsp" %>
-
-<div class="container mt-5">
-    <div class="card shadow-lg p-4">
-        <h2 class="text-center text-primary mb-4">Mega City Cab Booking</h2>
-        <form action="api/bookings" method="post" class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control" name="customerName" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Pickup Location</label>
-                <input type="text" class="form-control" name="pickupLocation" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Drop Location</label>
-                <input type="text" class="form-control" name="dropLocation" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Fare</label>
-                <input type="number" class="form-control" name="fare" required>
-            </div>
-            <div class="col-12 text-center">
-                <button type="submit" class="btn btn-primary">Book Now</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
