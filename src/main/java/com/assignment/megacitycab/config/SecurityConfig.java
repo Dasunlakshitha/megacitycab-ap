@@ -15,25 +15,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(customizer -> customizer.disable())
-               // .authorizeHttpRequests(request -> request.anyRequest().authenticated())
+                // .authorizeHttpRequests(request -> request.anyRequest().authenticated())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "login","/home", "/index", "/WEB-INF/views/**").permitAll()  // Allow JSP pages
+                        .requestMatchers("/", "login", "/home", "/index", "/WEB-INF/views/**").permitAll()  // Allow JSP pages
                         .requestMatchers("/api/**").permitAll()  // Allow API
                         .anyRequest().authenticated())
 
                 // .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
