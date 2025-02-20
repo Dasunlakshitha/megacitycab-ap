@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
     @GetMapping("/")
     public String showIndexPage(Model model) {
-        return "index";  // This maps to /WEB-INF/views/index.jsp
+        return "home";  // This maps to /WEB-INF/views/index.jsp
     }
 
 }

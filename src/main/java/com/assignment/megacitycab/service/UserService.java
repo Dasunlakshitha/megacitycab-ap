@@ -25,8 +25,8 @@ public class UserService implements UserDetailsService {
         Optional<AppUser> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             var userDetails = user.get();
-            return User.builder().username(userDetails.getUsername()).password(userDetails.getPassword()).build();
-
+           // return User.builder().username(userDetails.getUsername()).password(userDetails.getPassword()).build();
+           return new User(userDetails.getUsername(), userDetails.getPassword(), java.util.Collections.emptyList()); // No authorities for now
         } else {
             throw new UsernameNotFoundException("User not found");
         }

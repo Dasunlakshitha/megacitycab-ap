@@ -1,4 +1,4 @@
-<%--
+<!-- <%--
   Created by IntelliJ IDEA.
   User: ceydigitalsolutions
   Date: 2/20/25
@@ -50,3 +50,22 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+ -->
+ <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+ <html>
+ <head>
+     <title>Home</title>
+ </head>
+ <body>
+ <h1>Welcome to the Home Page!</h1>
+ 
+ <%-- You can display user information or other content here --%>
+ <%-- Example: Display the logged-in user's username --%>
+ <% if (request.getUserPrincipal() != null) { %>
+     <p>Welcome, <%= request.getUserPrincipal().getName() %>!</p>
+ <% } %>
+ 
+ <a href="/logout">Logout</a> <%-- Important: Use /logout for Spring Security's logout --%>
+ 
+ </body>
+ </html>

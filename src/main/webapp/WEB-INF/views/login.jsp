@@ -1,4 +1,4 @@
-<%--
+<!-- <%--
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="navbar.jsp" %>
 
@@ -92,5 +92,33 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> -->
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+
+<form action="/login" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <input type="submit" value="Login">
+</form>
+
+<a href="/register">Register</a>
+
+<%-- Display error messages if login fails --%>
+<% if (request.getParameter("error") != null) { %>
+    <p style="color: red;">Invalid username or password.</p>
+<% } %>
+
 </body>
 </html>

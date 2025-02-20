@@ -25,7 +25,6 @@ public class SecurityConfig {
     @Autowired
     private final UserService userService;
 
-
     @Bean
     public UserDetailsService userDetailsService() {
         return userService;
@@ -42,15 +41,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/home", "/index", "/WEB-INF/views/**").permitAll()  // Allow JSP pages
-                        .requestMatchers("/api/**").permitAll()  // Allow API
-                        .anyRequest().authenticated())
-
                 .formLogin(httpForm -> {
-                    httpForm.loginPage("/api/login").permitAll();
-                    httpForm.defaultSuccessUrl("/api/home");
+                    httpForm.loginPage("/login").permitAll();
+                    httpForm.defaultSuccessUrl("/home");
                 })
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login", "/register","/home", "/index", "/WEB-INF/views/**").permitAll()
+
+                        .requestMatchers("/api/**").permitAll() // Allow API
+                        .anyRequest().authenticated())
 
                 .build();
     }
@@ -59,6 +58,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }
