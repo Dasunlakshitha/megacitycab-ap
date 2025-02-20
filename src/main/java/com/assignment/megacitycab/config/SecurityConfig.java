@@ -1,73 +1,64 @@
 package com.assignment.megacitycab.config;
 
+import com.assignment.megacitycab.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@AllArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private JwtFilter jwtFilter;
+    private final UserService userService;
+
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(customizer -> customizer.disable())
-                // .authorizeHttpRequests(request -> request.anyRequest().authenticated())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "login", "/home", "/index", "/WEB-INF/views/**").permitAll()  // Allow JSP pages
-                        .requestMatchers("/api/**").permitAll()  // Allow API
-                        .anyRequest().authenticated())
-
-                // .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+    public UserDetailsService userDetailsService() {
+        return userService;
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
-        provider.setUserDetailsService(userDetailsService);
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login", "/home", "/index", "/WEB-INF/views/**").permitAll()  // Allow JSP pages
+                        .requestMatchers("/api/**").permitAll()  // Allow API
+                        .anyRequest().authenticated())
 
-        return configuration.getAuthenticationManager();
+                .formLogin(httpForm -> {
+                    httpForm.loginPage("/api/login").permitAll();
+                    httpForm.defaultSuccessUrl("/api/home");
+                })
 
+                .build();
     }
 
-   /* @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for testing
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/index", "/WEB-INF/views/**").permitAll()  // Allow JSP pages
-                        .requestMatchers("/api/**").permitAll()  // Allow API
-                        .anyRequest().authenticated()
-                )
-                .formLogin(login -> login.disable()) // Disable login form
-                .httpBasic(basic -> basic.disable()); // Disable basic authentication
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-        return http.build();
-    }*/
+
 }
