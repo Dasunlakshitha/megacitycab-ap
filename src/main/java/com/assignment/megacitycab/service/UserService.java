@@ -1,42 +1,60 @@
 package com.assignment.megacitycab.service;
 
+
 import com.assignment.megacitycab.model.AppUser;
 import com.assignment.megacitycab.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
-@AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder; // For password hashing
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            var userDetails = user.get();
-           // return User.builder().username(userDetails.getUsername()).password(userDetails.getPassword()).build();
-           return new User(userDetails.getUsername(), userDetails.getPassword(), java.util.Collections.emptyList()); // No authorities for now
-        } else {
-            throw new UsernameNotFoundException("User not found");
+    @PostConstruct
+    public void init() {
+        checkDatabaseConnection();
+    }
+
+    public AppUser registerUser(AppUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash password
+        user.setRole("ROLE_" + user.getRole());
+        return userRepository.save(user);
+    }
+
+    public List<AppUser> getAllUsers() {
+        return userRepository.findAll(); // Use JpaRepository's findAll()
+    }
+
+    public AppUser findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public void checkDatabaseConnection() {
+        try {
+            String sql = "SELECT 1"; // A very simple query
+            Integer result = jdbcTemplate.queryForObject(sql, Integer.class);
+            if (result != null && result == 1) {
+                System.out.println("Database connection is successful!");
+            } else {
+                System.out.println("Database connection test failed.");
+            }
+        } catch (Exception e) {
+            System.err.println("Database connection test failed: " + e.getMessage());
         }
     }
-
-    public AppUser register(AppUser appUser) {
-      //  appUser.setPassword(encoder.encode(appUser.getPassword()));
-        userRepository.save(appUser);
-        return appUser;
-    }
-
 
 }
