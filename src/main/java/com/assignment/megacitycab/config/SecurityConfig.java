@@ -1,3 +1,4 @@
+/*
 package com.assignment.megacitycab.config;
 
 
@@ -45,7 +46,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {  // Use filterChain name
         http.csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/register", "/home", "/index", "/WEB-INF/views/**").permitAll()
+                        .requestMatchers("/", "/login","/register", "/home", "/index", "/WEB-INF/views/**").permitAll()
                         .requestMatchers("/users").hasRole("ADMIN")
                         .requestMatchers("/api/**").permitAll() // If you have an API, secure it separately
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Example role-based access
@@ -71,3 +72,4 @@ public class SecurityConfig {
 
 
 }
+*/

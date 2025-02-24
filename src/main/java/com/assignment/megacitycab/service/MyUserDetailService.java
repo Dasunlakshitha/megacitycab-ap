@@ -1,3 +1,4 @@
+/*
 package com.assignment.megacitycab.service;
 
 import com.assignment.megacitycab.model.AppUser;
@@ -44,3 +45,4 @@ public class MyUserDetailService implements UserDetailsService {
     }
 
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.assignment.megacitycab.controllers;
 
 import com.assignment.megacitycab.model.AppUser;
@@ -22,4 +23,4 @@ public class UserController {
         return "user-list"; // Return the name of your JSP view (user-list.jsp)
     }
 
-}
+}*/
