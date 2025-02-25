@@ -68,8 +68,17 @@ public class SigUpController {
         MailMessengerHelper.htmlEmailMessenger("no-reply-verify@example.com", validate.getEmail(), "verify-Account", emailBody);*/
 
         // TODO: RE-ROUTE TO SUCCESS PAGE.
-        this.page = new ModelAndView("signup");
-        this.page.addObject(GeneralHelper.SUCCESS, "Registration Successful, please check email to verify your account");
+        if (user_role.equals("ADMIN")) {
+            this.page = new ModelAndView("/app/adminDashboard");
+        }
+        if (user_role.equals("CUSTOMER")) {
+            this.page = new ModelAndView("/app/customerDashboard");
+        }
+        if (user_role.equals("DRIVER")) {
+            this.page = new ModelAndView("/app/driverDashboard");
+        }
+        //this.page = new ModelAndView("signup");
+        this.page.addObject(GeneralHelper.SUCCESS, "Registration Successful,");
         return this.page;
     }// END OF SIGN UP POST METHO
 

@@ -91,7 +91,6 @@
     <h2>${role} Sign In</h2>
 
     <form action="/sign-in" method="post">
-        <input type="hidden" name="role" id="roleInput">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 

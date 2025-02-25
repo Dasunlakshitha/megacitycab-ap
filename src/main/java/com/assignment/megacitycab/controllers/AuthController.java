@@ -67,10 +67,24 @@ public class AuthController {
 
         // TODO: PROCEED TO AUTHENTICATE USER:
         String dbPassword = userService.getDbPasswordByUsername(validate.getUsername());
+        //String hashedPassword = BCrypt.hashpw(validate.getPassword(), BCrypt.gensalt());
+      /*  System.out.println("Entered Password: " + validate.getPassword()); // Or use your logging framework
+        System.out.println("DB Password: " + dbPassword);
+        if (dbPassword == null || dbPassword.isEmpty()) { // Handle the case where the user is not found
+            model.addAttribute(GeneralHelper.ERROR, "User not found");
+            return "sign-in";
+        }
 
         if (!BCrypt.checkpw(validate.getPassword(), dbPassword)) {
             model.addAttribute(GeneralHelper.ERROR, "Incorrect Username or Password");
-            return "signin";
+            return "sign-in";
+        }*/
+
+
+        if (!BCrypt.checkpw(validate.getPassword(), dbPassword)) {
+            model.addAttribute(GeneralHelper.ERROR, "Incorrect Username or Password");
+            //return "signin";
+            return "redirect:/error";
         }// VALIDATE / AUTHENTICATE USER IF BLOCK.
 
 
@@ -80,13 +94,13 @@ public class AuthController {
         if (user != null) {
             session.setAttribute("user", user);
             if (Objects.equals(user.getRole(), "ADMIN")) {
-                return "redirect:/adminDashboard";
+                return "redirect:/app/adminDashboard";
             }
             if (Objects.equals(user.getRole(), "CUSTOMER")) {
-                return "redirect:/customerDashboard";
+                return "redirect:/app/customerDashboard";
             }
             if (Objects.equals(user.getRole(), "DRIVER")) {
-                return "redirect:/driverDashboard";
+                return "redirect:/app/driverDashboard";
             }
 
 

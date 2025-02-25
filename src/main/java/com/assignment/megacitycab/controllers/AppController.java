@@ -13,9 +13,21 @@ public class AppController {
     private ModelAndView page;
 
 
-    @GetMapping("/dashboard")
-    public ModelAndView getDashboard(){
-        this.page = new ModelAndView("dashboard");
+    @GetMapping("/adminDashboard")
+    public ModelAndView getAdminDashboard(){
+        this.page = new ModelAndView("admin-dashboard");
+        page.addObject(GeneralHelper.PAGE_TITLE, "Dashboard");
+        return page;
+    }// END OF GET DASHBOARD PAGE.
+    @GetMapping("/driverDashboard")
+    public ModelAndView getDriverDashboard(){
+        this.page = new ModelAndView("driver-dashboard");
+        page.addObject(GeneralHelper.PAGE_TITLE, "Dashboard");
+        return page;
+    }// END OF GET DASHBOARD PAGE.
+    @GetMapping("/customerDashboard")
+    public ModelAndView getCustomerDashboard(){
+        this.page = new ModelAndView("customer-dashboard");
         page.addObject(GeneralHelper.PAGE_TITLE, "Dashboard");
         return page;
     }// END OF GET DASHBOARD PAGE.
