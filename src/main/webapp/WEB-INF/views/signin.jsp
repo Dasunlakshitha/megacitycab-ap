@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,9 +88,10 @@
 <body>
 
 <div class="signin-container">
-    <h2>Sign In</h2>
+    <h2>${role} Sign In</h2>
 
     <form action="/sign-in" method="post">
+        <input type="hidden" name="role" id="roleInput">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 
@@ -104,11 +106,18 @@
             </c:if>
         </div>
 
-        <div class="signup-link">
-            Don't have an account? <a href="/sign-up">Sign Up</a>
-        </div>
+    </form>
+    <form id="signupForm" action="/signup" method="post">
+        <input type="hidden" name="role" value="${role}">
+        <c:if test="${role != 'ADMIN'}">
+            <div class="signup-link">
+                Don't have an account? <a href="#"
+                                          onclick="document.getElementById('signupForm').submit(); return false;">Sign
+                Up</a>
+            </div>
+        </c:if>
+
     </form>
 </div>
-
 </body>
 </html>

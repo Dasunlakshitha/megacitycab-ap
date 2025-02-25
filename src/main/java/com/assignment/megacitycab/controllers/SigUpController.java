@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -20,10 +21,11 @@ public class SigUpController {
 
     private ModelAndView page;
 
-    @GetMapping("/signup")
-    public ModelAndView getSignUpPage() {
+    @PostMapping("/signup")
+    public ModelAndView getSignUpPage(@RequestParam(value = "role", required = false) String role) {
         this.page = new ModelAndView("signup");
         this.page.addObject("title", "Sign Up");
+        this.page.addObject("role", role);
         return this.page;
     }
 

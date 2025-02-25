@@ -51,10 +51,20 @@
 
 <div class="index-container">
     <h2>Welcome to MegaCityCab</h2>
-    <button onclick="location.href='/signin?role=admin'">Sign In as Admin</button>
-    <button onclick="location.href='/signin?role=driver'">Sign In as Driver</button>
-    <button onclick="location.href='/signin?role=customer'">Sign In as Customer</button>
+    <form id="signInForm" action="/signin" method="post">
+        <input type="hidden" name="role" id="roleInput">
+    </form>
+
+    <button onclick="submitForm('ADMIN')">Sign In as Admin</button>
+    <button onclick="submitForm('DRIVER')">Sign In as Driver</button>
+    <button onclick="submitForm('CUSTOMER')">Sign In as Customer</button>
 </div>
 
+<script>
+    function submitForm(role) {
+        document.getElementById("roleInput").value = role;
+        document.getElementById("signInForm").submit();
+    }
+</script>
 </body>
 </html>

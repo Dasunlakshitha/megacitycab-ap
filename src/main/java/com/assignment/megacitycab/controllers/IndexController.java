@@ -13,7 +13,7 @@ public class IndexController {
         return getIndexPage;
     }
     @GetMapping("/dashboard")
-    public ModelAndView getdashboard(){
+    public ModelAndView getDashboard(){
         ModelAndView getDashboardPage = new ModelAndView("dashboard");
         getDashboardPage.addObject("PageTitle", "Home");
         return getDashboardPage;

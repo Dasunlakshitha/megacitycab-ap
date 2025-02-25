@@ -112,7 +112,7 @@
 <body>
 
 <div class="signup-container">
-    <h2>Sign Up</h2>
+    <h2> ${role} Sign Up</h2>
 
     <form action="/sign-up" method="post" onsubmit="return validateForm();">
         <label for="username">Username:</label>
@@ -124,13 +124,14 @@
         <label for="confirmPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" name="confirm" required>
 
-
         <label for="role">Role:</label>
+        <input type="text" id="role" name="user_role" value="${role}" readonly>
+        <%--<label for="role">Role:</label>
         <select id="role" name="user_role">
-            <option value="CUSTOMER">Customer</option>
-            <option value="DRIVER">Driver</option>
-            <option value="ADMIN">Admin</option>
-        </select>
+            <option value="CUSTOMER">CUSTOMER</option>
+            <option value="DRIVER">DRIVER</option>
+            <option value="ADMIN">ADMIN</option>
+        </select>--%>
 
         <button type="submit">Sign Up</button>
 
@@ -140,8 +141,15 @@
             </c:if>
         </div>
 
+        <%-- <div class="login-link">
+             Already have an account? <a href="/signin">Login</a>
+         </div>--%>
+    </form>
+    <form id="loginForm" action="/signin" method="post">
+        <input type="hidden" name="role" value="${role}">
         <div class="login-link">
-            Already have an account? <a href="/login">Login</a>
+            Already have an account?
+            <a href="#" onclick="document.getElementById('loginForm').submit(); return false;">Login</a>
         </div>
     </form>
 </div>

@@ -16,65 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Objects;
 
-/*
-package com.assignment.megacitycab.controllers;
-
-
-import com.assignment.megacitycab.model.AppUser;
-import com.assignment.megacitycab.repository.UserRepository;
-import com.assignment.megacitycab.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
-
-
-@Controller
-public class AuthController {
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @PostMapping(value = "/api/register", headers = "application/json")
-    public AppUser registerUser(@RequestBody AppUser user) {
-        try {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userService.registerUser(user);
-        } catch (DataIntegrityViolationException e) {  // Handle unique constraint violation
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists"); // Or return a custom error response
-        }
-    }
-
-    @PostMapping("/api/test")
-    public String testEndpoint(@RequestBody String data) {
-        System.out.println("Received data: " + data);
-        return "Test successful";
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "login";  // This maps to /WEB-INF/views/login.jsp
-    }
-
-    @GetMapping("/register")
-    public String showRegisterPage() {
-        return "register";  // This maps to /WEB-INF/views/login.jsp
-    }
-
-    @GetMapping("/home")
-    public String showHomePage() {
-        return "home";  // This maps to /WEB-INF/views/login.jsp
-    }
-}
-*/
 @Controller
 public class AuthController {
 
@@ -84,9 +27,10 @@ public class AuthController {
     private ModelAndView page;
 
 
-    @GetMapping("/signin")
-    public ModelAndView getSignIn() {
+    @PostMapping("/signin")
+    public ModelAndView getSignIn(@RequestParam(value = "role", required = false) String role) {
         this.page = new ModelAndView("signin");
+        this.page.addObject("role", role);
         this.page.addObject("PageTitle", "Sign In");
         return this.page;
     }// END OF GET SIGN IN PAGE GET METHOD.
@@ -114,7 +58,7 @@ public class AuthController {
         }// END OF CHECK IF EMAIL EXISTS IF BLOCK.
 
         // TODO: CHECK IF ACCOUNT IS VERIFIED:
-       // int verified = userService.isAccountVerified(validate.getUsername());
+        // int verified = userService.isAccountVerified(validate.getUsername());
 
        /* if (verified == 0) {
             model.addAttribute("msg", "Your Account is not yet verified, please check your email and verify account");
@@ -135,8 +79,17 @@ public class AuthController {
 
         if (user != null) {
             session.setAttribute("user", user);
-            return "redirect:/app/dashboard";
-            //return "redirect:/index";
+            if (Objects.equals(user.getRole(), "ADMIN")) {
+                return "redirect:/adminDashboard";
+            }
+            if (Objects.equals(user.getRole(), "CUSTOMER")) {
+                return "redirect:/customerDashboard";
+            }
+            if (Objects.equals(user.getRole(), "DRIVER")) {
+                return "redirect:/driverDashboard";
+            }
+
+
         }
 
         return "redirect:/error";
