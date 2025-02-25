@@ -9,23 +9,22 @@ import java.util.HashMap;
 @Getter
 public class SignInValidationHelper {
     @Setter
-    private String email;
+    private String username;
     @Setter
     private String password;
     private final HashMap<String, String> errors;
 
     public SignInValidationHelper(String username, String password) {
-        this.email = username.toLowerCase();
+        this.username = username.toLowerCase();
         this.password = password;
         this.errors = new HashMap<>();
 
         checkForEmptyFields();
-        checkIfEmailIsValid();
     }// END OF ALL ARGS CONSTRUCTOR.
 
     public void checkForEmptyFields(){
 
-        if(this.getEmail().isEmpty()){
+        if(this.getUsername().isEmpty()){
             errors.put("email", "Email field cannot be empty");
         }
 
@@ -36,12 +35,7 @@ public class SignInValidationHelper {
 
     }// END OF CHECK FOR EMPTY FIELDS.
 
-    public void checkIfEmailIsValid(){
-        if(!GeneralHelper.regexEmailValidationPattern(this.getEmail())){
-            errors.put("email", "Please enter a valid email address");
-        }
 
-    }// END OP CHECK IF EMAIL IS VALID.
 
 
 

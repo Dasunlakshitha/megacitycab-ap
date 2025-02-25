@@ -55,17 +55,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT token, code FROM users WHERE token= :token AND code= :code", nativeQuery = true)
     List<String> checkTokenAndCode(@Param("token") String token, @Param("code") int code);
 
-    @Query(value = "SELECT email FROM users WHERE email= :email", nativeQuery = true)
-    String doesEmailExist(@Param("email") String email);
+    @Query(value = "SELECT username FROM users WHERE username= :username", nativeQuery = true)
+    String doesUsernameExist(@Param("username") String username);
 
-    @Query(value = "SELECT verified FROM users WHERE email = :email", nativeQuery = true)
-    int isAccountVerified(@Param("email") String email);
+    @Query(value = "SELECT verified FROM users WHERE username = :username", nativeQuery = true)
+    int isAccountVerified(@Param("username") String username);
 
-    @Query(value = "SELECT password FROM users WHERE email = :email", nativeQuery = true)
-    String getDbPasswordByEmail(@Param("email") String password);
+    @Query(value = "SELECT password FROM users WHERE username = :username", nativeQuery = true)
+    String getDbPasswordByUsername(@Param("username") String username);
 
-    @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
-    User getUserDetailsByEmail(@Param("email") String email);
+    @Query(value = "SELECT * FROM users WHERE username = :username", nativeQuery = true)
+    User getUserDetailsByUsername(@Param("username") String username);
 
     @Query(value = "SELECT password FROM users WHERE token= :token AND code = :code", nativeQuery = true)
     String getHashedPasswordByTokenAndCode(@Param("token") String token, @Param("code") String code);

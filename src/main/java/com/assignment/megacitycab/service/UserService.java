@@ -89,24 +89,24 @@ public class UserService {
         return userRepository.checkTokenAndCode(token, code);
     }// END OF CHECK TOKEN AND CODE SERVICE METHOD.
 
-    public String doesEmailExist(String email) {
-        return userRepository.doesEmailExist(email);
+    public String doesUserExist(String username) {
+        return userRepository.doesUsernameExist(username);
     }// END OF DOES EMAIL EXIST SERVICE METHOD.
 
-    public int isAccountVerified(String email) {
-        return userRepository.isAccountVerified(email);
+    public int isAccountVerified(String username) {
+        return userRepository.isAccountVerified(username);
     }// END OF CHECK IF ACCOUNT IS VERIFIED.
 
-    public String getDbPasswordByEmail(String email) {
-        return userRepository.getDbPasswordByEmail(email);
+    public String getDbPasswordByUsername(String username) {
+        return userRepository.getDbPasswordByUsername(username);
     }// END OF GET DB PASSWORD BY EMAIL SERVICE METHOD.
 
 
-    public User getUserDetailsByEmail(String email) {
-        return userRepository.getUserDetailsByEmail(email);
+    public User getUserDetailsByUsername(String username) {
+        return userRepository.getUserDetailsByUsername(username);
     }// END OF GET USER DETAILS BY EMAIL SERVICE METHOD.
 
-    public int forgotPassword(String token, String code, String password, String Email) {
+    public int forgotPassword(String token, String code, String password, String username) {
         return userRepository.forgotPassword(token, code, password);
     }// END OF FORGOT PASSWORD SERVICE METHOD.
 
@@ -118,8 +118,8 @@ public class UserService {
         return userRepository.getHashedPasswordByTokenAndCode(token, code);
     }// END OF GET HASHED PASSWORD BY TOKEN AND CODE SERVICE METHOD.
 
-    public int updatePasswordByEmail(String password, String email) {
-        return userRepository.updatePasswordByEmail(password, email);
-    }// END OF UPDATE PASSWORD BY EMAIL.
+  /*  public int updatePasswordByUsername(String password, String username) {
+        return userRepository.updatePasswordByUsername(password, username);
+    }// END OF UPDATE PASSWORD BY EMAIL.*/
 
 }// END OF USER SERVICE CLASS.

@@ -12,4 +12,10 @@ public class IndexController {
         getIndexPage.addObject("PageTitle", "Home");
         return getIndexPage;
     }
+    @GetMapping("/dashboard")
+    public ModelAndView getdashboard(){
+        ModelAndView getDashboardPage = new ModelAndView("dashboard");
+        getDashboardPage.addObject("PageTitle", "Home");
+        return getDashboardPage;
+    }
 }

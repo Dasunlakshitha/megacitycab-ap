@@ -84,21 +84,21 @@ public class AuthController {
     private ModelAndView page;
 
 
-    @GetMapping("/sign-in")
+    @GetMapping("/signin")
     public ModelAndView getSignIn() {
-        this.page = new ModelAndView("sign-in");
+        this.page = new ModelAndView("signin");
         this.page.addObject("PageTitle", "Sign In");
         return this.page;
     }// END OF GET SIGN IN PAGE GET METHOD.
 
 
     @PostMapping("/sign-in")
-    public String authenticateUser(@RequestParam("email") String email,
+    public String authenticateUser(@RequestParam("username") String username,
                                    @RequestParam("password") String password,
                                    Model model, HttpSession session) {
 
         // TODO: VALIDATE FORM DATE / INPUT FIELDS:
-        SignInValidationHelper validate = new SignInValidationHelper(email, password);
+        SignInValidationHelper validate = new SignInValidationHelper(username, password);
         if (!validate.getErrors().isEmpty()) {
             model.addAttribute(GeneralHelper.FORM_ERRORS, validate.getErrors());
             model.addAttribute(GeneralHelper.FORM_DATA, validate);
@@ -106,36 +106,37 @@ public class AuthController {
         }// END OF VALIDATE FORM DATA / INPUT FIELDS IF BLOCK.
 
         // TODO: CHECK IF THE EMAIL EXISTS:
-        String doesEmailExist = userService.doesEmailExist(validate.getEmail());
+        String doesUserExist = userService.doesUserExist(validate.getUsername());
 
-        if (doesEmailExist == null || doesEmailExist.isEmpty()) {
+        if (doesUserExist == null || doesUserExist.isEmpty()) {
             model.addAttribute("msg", "There is no account linked to this email");
             return "error";
         }// END OF CHECK IF EMAIL EXISTS IF BLOCK.
 
         // TODO: CHECK IF ACCOUNT IS VERIFIED:
-        int verified = userService.isAccountVerified(validate.getEmail());
+       // int verified = userService.isAccountVerified(validate.getUsername());
 
-        if (verified == 0) {
+       /* if (verified == 0) {
             model.addAttribute("msg", "Your Account is not yet verified, please check your email and verify account");
             return "error";
-        }// END OF CHECK IF ACCOUNT IS VERIFIED.
+        }// END OF CHECK IF ACCOUNT IS VERIFIED.*/
 
         // TODO: PROCEED TO AUTHENTICATE USER:
-        String dbPassword = userService.getDbPasswordByEmail(validate.getEmail());
+        String dbPassword = userService.getDbPasswordByUsername(validate.getUsername());
 
         if (!BCrypt.checkpw(validate.getPassword(), dbPassword)) {
             model.addAttribute(GeneralHelper.ERROR, "Incorrect Username or Password");
-            return "sign-in";
+            return "signin";
         }// VALIDATE / AUTHENTICATE USER IF BLOCK.
 
 
         // TODO: INIT USER OBJECT AND SET SESSION:
-        User user = userService.getUserDetailsByEmail(validate.getEmail());
+        User user = userService.getUserDetailsByUsername(validate.getUsername());
 
         if (user != null) {
             session.setAttribute("user", user);
             return "redirect:/app/dashboard";
+            //return "redirect:/index";
         }
 
         return "redirect:/error";
