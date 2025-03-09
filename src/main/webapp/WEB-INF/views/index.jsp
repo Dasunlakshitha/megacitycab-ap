@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>MegaCityCab - Home</title>
@@ -67,4 +68,5 @@
     }
 </script>
 </body>
+
 </html>

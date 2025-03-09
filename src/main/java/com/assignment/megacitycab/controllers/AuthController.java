@@ -149,3 +149,4 @@ public class AuthController {
     }// END OF VERIFY ACCOUNT GET METHOD.
 
 }// END OF AUTH CONTROLLER CLASS.
+
