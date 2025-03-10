@@ -1,3 +1,4 @@
+/*
 package com.assignment.megacitycab.repository;
 
 import com.assignment.megacitycab.model.Booking;
@@ -10,3 +11,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByCustomerId(String customerId);
     List<Booking> findByDriverId(String driverId);
 }
+*/
