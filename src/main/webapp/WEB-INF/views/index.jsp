@@ -1,43 +1,72 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 
 <html>
 <head>
-    <title>Booking Page</title>
+    <title>MegaCityCab - Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #e0f2f7, #bbdefb);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .index-container {
+            background-color: #fff;
+            padding: 3em;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0d47a1;
+            margin-bottom: 1.5em;
+        }
+
+        button {
+            background-color: #0d47a1;
+            color: white;
+            padding: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1em;
+            margin-bottom: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0b3983;
+        }
+    </style>
 </head>
 <body>
-<h2>Welcome to Mega City Cab Booking System</h2>
 
-<!-- Display existing bookings -->
-<h3>Existing Bookings:</h3>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Pickup</th>
-        <th>Drop</th>
-        <th>Fare</th>
-    </tr>
-    <c:forEach var="booking" items="${bookings}">
-        <tr>
-            <td>${booking.id}</td>
-            <td>${booking.customerName}</td>
-            <td>${booking.pickupLocation}</td>
-            <td>${booking.dropLocation}</td>
-            <td>${booking.fare}</td>
-        </tr>
-    </c:forEach>
-</table>
+<div class="index-container">
+    <h2>Welcome to MegaCityCab</h2>
+    <form id="signInForm" action="/signin" method="post">
+        <input type="hidden" name="role" id="roleInput">
+    </form>
 
-<!-- Booking form -->
-<form action="/api/bookings" method="post">
-    <label>Name:</label> <input type="text" name="customerName"><br>
-    <label>Pickup:</label> <input type="text" name="pickupLocation"><br>
-    <label>Drop:</label> <input type="text" name="dropLocation"><br>
-    <label>Fare:</label> <input type="text" name="fare"><br>
-    <button type="submit">Book Now</button>
-</form>
+    <button onclick="submitForm('ADMIN')">Sign In as Admin</button>
+    <button onclick="submitForm('DRIVER')">Sign In as Driver</button>
+    <button onclick="submitForm('CUSTOMER')">Sign In as Customer</button>
+</div>
 
+<script>
+    function submitForm(role) {
+        document.getElementById("roleInput").value = role;
+        document.getElementById("signInForm").submit();
+    }
+</script>
 </body>
+
 </html>

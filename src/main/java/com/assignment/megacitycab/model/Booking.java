@@ -1,42 +1,35 @@
 package com.assignment.megacitycab.model;
+
 import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
 
-
-@Entity
+import java.time.LocalDateTime;
 @Table(name = "bookings")
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String bookingNumber;
     private String customerName;
-    private String pickupLocation;
-    private String dropLocation;
+    private String customerAddress;
+    private String customerNIC;
+    private String telephoneNumber;
+    private String destination;
+    private LocalDateTime bookingTime;
     private double fare;
+    private String status; // e.g., PENDING, COMPLETED, CANCELLED
 
-    // Constructors
-    public Booking() {}
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private User customer;
 
-    public Booking(String customerName, String pickupLocation, String dropLocation, double fare) {
-        this.customerName = customerName;
-        this.pickupLocation = pickupLocation;
-        this.dropLocation = dropLocation;
-        this.fare = fare;
-    }
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private User driver;
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getCustomerName() { return customerName; }
-    public void setCustomerName(String customerName) { this.customerName = customerName; }
-
-    public String getPickupLocation() { return pickupLocation; }
-    public void setPickupLocation(String pickupLocation) { this.pickupLocation = pickupLocation; }
-
-    public String getDropLocation() { return dropLocation; }
-    public void setDropLocation(String dropLocation) { this.dropLocation = dropLocation; }
-
-    public double getFare() { return fare; }
-    public void setFare(double fare) { this.fare = fare; }
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
 }
