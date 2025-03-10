@@ -1,3 +1,4 @@
+/*
 package com.assignment.megacitycab.repository;
 
 import com.assignment.megacitycab.model.Vehicle;
@@ -9,3 +10,4 @@ import java.util.List;
 public interface CarRepository extends JpaRepository<Vehicle, Long> {
     List<Vehicle> findByCustomerId(String customerId);
 }
+*/
