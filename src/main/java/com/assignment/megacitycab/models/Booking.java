@@ -1,8 +1,10 @@
-package com.assignment.megacitycab.model;
+package com.assignment.megacitycab.models;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "bookings")
 public class Booking {

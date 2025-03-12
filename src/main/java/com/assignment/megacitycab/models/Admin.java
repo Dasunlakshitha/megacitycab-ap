@@ -1,4 +1,4 @@
-package com.assignment.megacitycab.model;
+package com.assignment.megacitycab.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
