@@ -123,6 +123,13 @@ public class WebController {
         return "drivers"; // Returns drivers.jsp
     }
 
+    @GetMapping("/driver-dashboard/{email}")
+    public String driverDashboard(@PathVariable String email, Model model) {
+
+
+        return "driver-dashboard"; // Returns drivers.jsp
+    }
+
     // Create Driver Page
     @GetMapping("/create-driver")
     public String createDriver() {
@@ -158,10 +165,11 @@ public class WebController {
     public String userBookings(@RequestParam("email") String email, Model model) {
 
         Optional<User> existingUser = userService.getUserByEmail(email);
-
+        List<Vehicle> vehicles = vehicleService.getAllVehicles();
         if(existingUser.isPresent()){
             User user = existingUser.get();
             model.addAttribute("user", user);
+            model.addAttribute("vehicles", vehicles);
             return "user-bookings"; // Returns bookings.jsp
         }else{
             return "/";

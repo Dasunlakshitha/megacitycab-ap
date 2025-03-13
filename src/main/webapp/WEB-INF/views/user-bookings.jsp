@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.assignment.megacitycab.models.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.assignment.megacitycab.models.Vehicle" %>
+<%@ page import="com.assignment.megacitycab.services.CalculateDiscountService" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +29,23 @@
             <% } %>
         </div>
         <div>
+            <label class="block text-sm font-medium text-gray-700">Vehicle</label>
+            <% List<Vehicle> vehicles = (List<Vehicle>) request.getAttribute("vehicles"); %>
+
+            <% if (vehicles != null) { %>
+            <select id="vehicleId" name="vehicleID" class="block w-full mt-2 p-2 border rounded">
+                <% for (Vehicle vehicle : vehicles) { %>
+                <option value="<%= vehicle.getVehicleID() %>">
+                    <%= vehicle.getModel() %> - <%= vehicle.getRegistrationNo() %> (Capacity: <%= vehicle.getCapacity() %>)
+                </option>
+                <% } %>
+            </select>
+
+            <% } else { %>
+            <p class="text-red-500">Vehicles not found.</p>
+            <% } %>
+        </div>
+        <div>
             <label for="pickupLocation" class="block text-sm font-medium text-gray-700">Pickup Location</label>
             <input type="text" id="pickupLocation" name="pickupLocation" required
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
@@ -34,11 +55,21 @@
             <input type="text" id="dropoffLocation" name="dropoffLocation" required
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
         </div>
+
         <div>
             <label for="fare" class="block text-sm font-medium text-gray-700">Fare</label>
             <input type="number" id="fare" name="fare" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                   oninput="applyDiscount()">
+        </div>
+
+        <div>
+            <label for="discountedFare" class="block text-sm font-medium text-gray-700">You are getting 5% discount for new year!</label>
+            <input type="text" id="discountedFare" readonly
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
         </div>
+
+
 
         <div>
             <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
@@ -55,10 +86,43 @@
 </div>
 
 <script>
+    <%
+    // Get instance of the singleton discount service
+    CalculateDiscountService discountService = CalculateDiscountService.getInstance();
+%>
+    function applyDiscount() {
+        let fareInput = document.getElementById("fare");
+        let discountedFareInput = document.getElementById("discountedFare");
+
+        let fare = parseFloat(fareInput.value);
+        if (isNaN(fare) || fare <= 0) {
+            discountedFareInput.value = "";
+            return;
+        }
+
+        // Call the service directly using JSP scriptlet
+        <%
+            double fareValue = 0.0;
+            double discountedPrice = 0.0;
+        %>
+
+        if (!isNaN(fare)) {
+            console.log("Fare is not nan " +fare)
+            <%
+                fareValue = Double.parseDouble(request.getParameter("fare") != null ? request.getParameter("fare") : "0");
+                discountedPrice = discountService.calculateDiscount(fareValue);
+            %>
+            discountedFareInput.value = fare / 100 * 3;
+        }else{
+            console.log("Fare is nan")
+        }
+    }
+
     document.getElementById("createBookingForm").addEventListener("submit", async function(event) {
         event.preventDefault();
 
         const userId = document.getElementById("userId").value;
+        const vehicleId = document.getElementById("vehicleId").value;
         const pickupLocation = document.getElementById("pickupLocation").value;
         const dropoffLocation = document.getElementById("dropoffLocation").value;
         const fare = document.getElementById("fare").value;
@@ -66,6 +130,7 @@
 
         const requestBody = JSON.stringify({
             customerId: parseInt(userId),
+            vehicleId: parseInt(vehicleId),
             pickupLocation,
             dropoffLocation,
             fare: parseFloat(fare),

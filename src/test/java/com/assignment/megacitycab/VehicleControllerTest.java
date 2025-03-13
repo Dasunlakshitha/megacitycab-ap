@@ -57,10 +57,8 @@ class VehicleControllerTest {
 
     @Test
     void getAllVehicles_ShouldReturnAllVehicles() throws Exception {
-        // Arrange
         when(vehicleService.getAllVehicles()).thenReturn(Arrays.asList(vehicle1, vehicle2));
 
-        // Act & Assert
         mockMvc.perform(get("/api/vehicles"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
