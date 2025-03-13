@@ -10,20 +10,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-    @EnableWebSecurity
-    public class SecurityConfig {
+@EnableWebSecurity
+public class SecurityConfig {
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-            return httpSecurity
-                    .csrf(csrf -> csrf.disable())
-                    .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/api/users").permitAll()
-                            .requestMatchers("/api/users/login").permitAll()
-                            .anyRequest().permitAll()
-                    )
-                    .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .httpBasic(Customizer.withDefaults())
-                    .build();
-        }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/api/users/login").permitAll()
+                        .anyRequest().permitAll()
+                )
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(Customizer.withDefaults())
+                .build();
     }
+}

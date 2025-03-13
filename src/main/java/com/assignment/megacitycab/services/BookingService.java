@@ -22,6 +22,7 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+
     // Create or Update Booking
     @Autowired
     private CustomerRepository customerRepository;
@@ -34,19 +35,40 @@ public class BookingService {
 
     public Booking saveBooking(BookingDTO bookingDTO) {
         Booking booking = new Booking();
-
+        System.out.println(bookingDTO.getCustomerId());
         // Find and set related entities
         Customer customer = customerRepository.findById(bookingDTO.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         booking.setCustomer(customer);
 
-        Driver driver = driverRepository.findById(bookingDTO.getDriverId())
-                .orElseThrow(() -> new RuntimeException("Driver not found"));
+        // Fetch driver, fallback to first available if not found
+        Driver driver =
+                bookingDTO.getDriverId() == null ?
+                        driverRepository.findAll().stream().findFirst()
+                                .orElseThrow(() -> new RuntimeException("No available drivers"))
+        :
+
+                driverRepository.findById(bookingDTO.getDriverId())
+                .orElseGet(() -> driverRepository.findAll().stream().findFirst()
+                        .orElseThrow(() -> new RuntimeException("No available drivers")));
+
+// Set the driver
         booking.setDriver(driver);
 
-        Vehicle vehicle = vehicleRepository.findById(bookingDTO.getVehicleId())
-                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+// Fetch vehicle, fallback to first available if not found
+        Vehicle vehicle =
+
+                bookingDTO.getVehicleId() == null ?
+                        vehicleRepository.findAll().stream().findFirst()
+                                .orElseThrow(() -> new RuntimeException("No available vehicles"))
+        :
+                vehicleRepository.findById(bookingDTO.getVehicleId())
+                .orElseGet(() -> vehicleRepository.findAll().stream().findFirst()
+                        .orElseThrow(() -> new RuntimeException("No available vehicles")));
+
+// Set the vehicle
         booking.setVehicle(vehicle);
+
 
         // Set other fields
         booking.setPickupLocation(bookingDTO.getPickupLocation());

@@ -2,6 +2,7 @@ package com.assignment.megacitycab.services;
 
 import com.assignment.megacitycab.dtos.UserDTO;
 import com.assignment.megacitycab.models.User;
+import com.assignment.megacitycab.repositories.CustomerRepository;
 import com.assignment.megacitycab.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,12 +17,20 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     // Create or Update User
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     // Create or Update User with Encrypted Password
     public User saveUser(UserDTO userDTO) {
+        //check for user
+        Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
+        if(existingUser.isPresent()){
+            return existingUser.get();
+        }
         User user = new User();
         user.setName(userDTO.getName());
         user.setPhone(userDTO.getPhone());
@@ -56,6 +65,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<User> getUserByEmail(String id) {
+        return userRepository.findByEmail(id);
+    }
+
     // Get All Users
     public List<User> getAllUsers() {
         return userRepository.findByDeleteStatusFalse();
@@ -76,14 +89,21 @@ public class UserService {
     // Login
     public Optional<User> login(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            userOptional = customerRepository.findByEmail(email); // Fallback check in CustomerRepo
+        }
+
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setId(userOptional.get().getId());
-            // Check if the provided password matches the encrypted password
+            System.out.println("User password "+user.getPassword());
+            // Check password
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return userOptional; // Login successful
+                return Optional.of(user); // Login successful
             }
         }
+
         return Optional.empty(); // Login failed
     }
+
 }

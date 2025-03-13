@@ -3,6 +3,7 @@ package com.assignment.megacitycab.services;
 import com.assignment.megacitycab.models.Customer;
 import com.assignment.megacitycab.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,16 @@ import java.util.Optional;
 public class CustomerService {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     private CustomerRepository customerRepository;
 
     // Create or Update Customer
     public Customer saveCustomer(Customer customer) {
+
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
         return customerRepository.save(customer);
     }
 

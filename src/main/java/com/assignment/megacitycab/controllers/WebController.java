@@ -6,9 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -31,6 +34,10 @@ public class WebController {
     @Autowired
     private PaymentService paymentService;
 
+    @GetMapping("/")
+    public String home() {
+        return "home";
+    }
     @GetMapping("/login")
     public String login() {
         return "login"; // Returns login.jsp
@@ -146,6 +153,42 @@ public class WebController {
         List<Booking> bookings = bookingService.getAllBookings();
         model.addAttribute("bookings", bookings);
         return "bookings"; // Returns bookings.jsp
+    }
+    @GetMapping("/user-bookings")
+    public String userBookings(@RequestParam("email") String email, Model model) {
+
+        Optional<User> existingUser = userService.getUserByEmail(email);
+
+        if(existingUser.isPresent()){
+            User user = existingUser.get();
+            model.addAttribute("user", user);
+            return "user-bookings"; // Returns bookings.jsp
+        }else{
+            return "/";
+        }
+    }
+
+    @GetMapping("/my-bookings")
+    public String myBookings(@RequestParam("email") String email, Model model) {
+
+        Optional<User> existingUser = userService.getUserByEmail(email);
+        List<Booking> bookings = bookingService.getAllBookings();
+        List<Booking> filteredBookings = existingUser
+                .map(user -> bookings.stream()
+                        .filter(booking ->
+                                (booking.getDriver() != null && booking.getDriver().getId().equals(user.getId())) ||
+                                        (booking.getCustomer() != null && booking.getCustomer().getId().equals(user.getId())))
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+
+        if(existingUser.isPresent()){
+            User user = existingUser.get();
+            model.addAttribute("user", user);
+            model.addAttribute("bookings", filteredBookings);
+            return "my-bookings"; // Returns bookings.jsp
+        }else{
+            return "/";
+        }
     }
 
     // Create Booking Page

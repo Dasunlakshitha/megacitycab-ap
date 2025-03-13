@@ -57,10 +57,14 @@
             }
 
             const data = await response.json();
-            alert("Login successful!");
+
+            console.log(`data ` + data);
+            // Save email as a cookie
+            document.cookie = "email=" + email + "; path=/; max-age=86400"; // Cookie expires in 1 day
+            document.cookie = "role=" + data["role"] + "; path=/; max-age=86400";
 
             // Redirect to dashboard or another page
-            window.location.href = "/dashboard";
+            if(data['role']==="ADMIN"){ window.location.href = "/dashboard"; }else{ window.location.href = "/"; }
         } catch (error) {
             alert(error.message);
         }

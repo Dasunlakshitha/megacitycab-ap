@@ -48,10 +48,37 @@
 
 </div>
 <script>
+    // Get a cookie
+    function getCookie(name) {
+        const cname = name + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(cname) === 0) {
+                return c.substring(cname.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function checkUser(){
+        const role =  getCookie("role")
+        console.log(role)
+        if(role!=="ADMIN"){
+            window.location.href = "/";
+        }
+    }
+    checkUser();
     function confirmLogout() {
         if (confirm("Are you sure you want to logout?")) {
-            window.location.href = "/login"; // Navigate to the login page
+            window.location.href = "/";
+            deleteCookie("email");
+            deleteCookie("role");
         }
+    }
+    function deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
 </script>
 </body>

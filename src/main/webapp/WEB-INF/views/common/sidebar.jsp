@@ -44,7 +44,13 @@
 <script>
     function confirmLogout() {
         if (confirm("Are you sure you want to logout?")) {
-            window.location.href = "/login"; // Navigate to the login page
+            window.location.href = "/";
+            deleteCookie("email");
+            deleteCookie("role");
         }
+    }
+    function deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
     }
 </script>

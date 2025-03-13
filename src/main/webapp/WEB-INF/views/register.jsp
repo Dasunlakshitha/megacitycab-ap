@@ -10,7 +10,7 @@
 <body class="bg-gray-100 flex items-center justify-center h-screen">
 <div class="bg-white p-8 rounded-lg shadow-md w-96">
     <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
-    <form action="/api/users" method="post" class="space-y-4">
+    <form id="registerForm" class="space-y-4">
         <div>
             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
             <input type="text" id="name" name="name" required
@@ -27,13 +27,7 @@
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
         </div>
         <div>
-            <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-            <select id="role" name="role" required
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                <option value="CUSTOMER">Customer</option>
-                <option value="ADMIN">Admin</option>
-                <option value="DRIVER">Driver</option>
-            </select>
+            <input type="hidden" id="role" name="role" value="CUSTOMER" required />
         </div>
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
@@ -51,5 +45,41 @@
         <p class="text-sm text-gray-600">Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login</a></p>
     </div>
 </div>
+
+<script>
+    document.getElementById("registerForm").addEventListener("submit", async function(event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        const formData = {
+            name: document.getElementById("name").value,
+            phone: document.getElementById("phone").value,
+            email: document.getElementById("email").value,
+            role: document.getElementById("role").value,
+            password: document.getElementById("password").value
+        };
+
+        try {
+            const response = await fetch("/api/customers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error("Registration failed");
+            }
+
+            const data = await response.json();
+            alert("Registration successful! Please login.");
+
+            // Redirect to login page
+            window.location.href = "/login";
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+</script>
 </body>
 </html>
