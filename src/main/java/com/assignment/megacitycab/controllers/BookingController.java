@@ -58,6 +58,7 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
     @GetMapping("/generate-pdf")
     public void generatePdf(HttpServletResponse response) throws IOException {
         // Fetch bookings from the service
@@ -68,7 +69,7 @@ public class BookingController {
         response.setHeader("Content-Disposition", "attachment; filename=\"bookings.pdf\"");
 
         // Create PDF document
-        try  {
+        try {
             var document = new Document();
             PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
