@@ -1,75 +1,85 @@
-<%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Register</title>
-    <meta name="_csrf" content="${_csrf.token}">
-    <%-- CSRF meta tag --%>
-    <meta name="_csrf_header" content="${_csrf.headerName}">
-    <%-- CSRF header name meta tag --%>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Car Booking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<h1>Register</h1>
-
-<form id="registrationForm" onsubmit="" action="/api/register" method="post">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-
-    <label for="role">Role:</label>
-    <select id="role" name="role">
-        <option value="USER">User</option>
-        <option value="ADMIN">Admin</option>
-    </select><br><br>
-
-    <button type="submit">Register</button>
-</form>
-
-<a href="/login">Login</a>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+<div class="bg-white p-8 rounded-lg shadow-md w-96">
+    <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
+    <form id="registerForm" class="space-y-4">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+            <input type="text" id="name" name="name" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+            <input type="text" id="phone" name="phone" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="text" id="email" name="email" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <input type="hidden" id="role" name="role" value="CUSTOMER" required />
+        </div>
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input type="password" id="password" name="password" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Register
+            </button>
+        </div>
+    </form>
+    <div class="mt-4 text-center">
+        <p class="text-sm text-gray-600">Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login</a></p>
+    </div>
+</div>
 
 <script>
-    function registerUser(event) {
-        event.preventDefault();
+    document.getElementById("registerForm").addEventListener("submit", async function(event) {
+        event.preventDefault(); // Prevent form from submitting normally
 
-        const form = document.getElementById("registrationForm");
-        const username = form.username.value;
-        const password = form.password.value;
-        const role = form.role.value;
-        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+        const formData = {
+            name: document.getElementById("name").value,
+            phone: document.getElementById("phone").value,
+            email: document.getElementById("email").value,
+            role: document.getElementById("role").value,
+            password: document.getElementById("password").value
+        };
 
-        fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                    [csrfHeaderName]: csrfToken
-            },
-            body: JSON.stringify({username, password, role})
-        })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        throw new Error("Username already exists.");
-                    } else {
-                        return response.text().then(err => {
-                            throw new Error(err)
-                        });
-                    }
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert("Registration successful!");
-                window.location.href = "/login";
-            })
-            .catch(error => {
-                alert("Registration failed: " + error.message);
+        try {
+            const response = await fetch("/api/customers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
             });
-    }
-</script>
 
+            if (!response.ok) {
+                throw new Error("Registration failed");
+            }
+
+            const data = await response.json();
+            alert("Registration successful! Please login.");
+
+            // Redirect to login page
+            window.location.href = "/login";
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+</script>
 </body>
 </html>
