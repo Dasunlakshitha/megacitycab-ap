@@ -38,12 +38,44 @@
             </li>
         </ul>
     </div>
-
     <!-- Main Content -->
+    <div class="flex-1 p-8">
+        <h1 class="text-3xl font-bold mb-6">Dashboard Overview</h1>
+
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-4 shadow rounded-lg text-center">
+                <h2 class="text-xl font-semibold">Total Users</h2>
+                <p id="totalUsers" class="text-2xl font-bold text-blue-700">0</p>
+            </div>
+            <div class="bg-white p-4 shadow rounded-lg text-center">
+                <h2 class="text-xl font-semibold">Total Customers</h2>
+                <p id="totalCustomers" class="text-2xl font-bold text-blue-700">0</p>
+            </div>
+            <div class="bg-white p-4 shadow rounded-lg text-center">
+                <h2 class="text-xl font-semibold">Total Bookings</h2>
+                <p id="totalBookings" class="text-2xl font-bold text-green-700">0</p>
+            </div>
+            <div class="bg-white p-4 shadow rounded-lg text-center">
+                <h2 class="text-xl font-semibold">Total Vehicles</h2>
+                <p id="totalVehicles" class="text-2xl font-bold text-orange-700">0</p>
+            </div>
+            <div class="bg-white p-4 shadow rounded-lg text-center">
+                <h2 class="text-xl font-semibold">Total Drivers</h2>
+                <p id="totalDrivers" class="text-2xl font-bold text-red-700"><%= request.getAttribute("totalDrivers") %></p>
+            </div>
+        </div>
+
+        <div id="content" class="bg-white p-6 shadow rounded-lg mt-6">
+            <p>Select a section from the sidebar to manage the system.</p>
+        </div>
+    </div>
+</div>
+   <%-- <!-- Main Content -->
     <div class="flex-1 p-8">
         <h1 class="text-3xl font-bold mb-6">Welcome to the Car Booking System</h1>
         <p class="text-gray-700">Select a section from the sidebar to manage the system.</p>
-    </div>
+    </div>--%>
 
 
 </div>
@@ -80,6 +112,66 @@
     function deleteCookie(name) {
         document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
+</script>
+<script>
+    function fetchUserCount() {
+        fetch('/api/users/count')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalUsers').innerText = data;
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+    }
+
+    fetchUserCount();
+</script>
+<script>
+    function fetchUserCount() {
+        fetch('/api/customers/count')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalCustomers').innerText = data;
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+    }
+
+    fetchUserCount();
+</script>
+<script>
+    function fetchUserCount() {
+        fetch('/api/bookings/count')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalBookings').innerText = data;
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+    }
+
+    fetchUserCount();
+</script>
+<script>
+    function fetchUserCount() {
+        fetch('/api/drivers/count')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalDrivers').innerText = data;
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+    }
+
+    fetchUserCount();
+</script>
+<script>
+    function fetchUserCount() {
+        fetch('/api/vehicles/count')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalVehicles').innerText = data;
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+    }
+
+    fetchUserCount();
 </script>
 </body>
 </html>

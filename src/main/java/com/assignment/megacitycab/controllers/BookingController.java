@@ -94,4 +94,10 @@ public class BookingController {
             throw new IOException("Failed to generate PDF", e);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getBookingsCount() {
+        long count = bookingService.getTotalBookings();
+        return ResponseEntity.ok(count);
+    }
 }

@@ -19,6 +19,9 @@ public class DriverService {
         driver.setRole("DRIVER");
         return driverRepository.save(driver);
     }
+    public long totalDrivers() {
+        return driverRepository.countByDeleteStatusFalse();
+    }
 
     // Get Driver by ID
     public Optional<Driver> getDriverById(Long id) {

@@ -62,4 +62,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getUserCount() {
+        long count = userService.getUserCount();
+        return ResponseEntity.ok(count);
+    }
 }

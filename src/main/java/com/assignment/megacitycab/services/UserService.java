@@ -59,7 +59,9 @@ public class UserService {
             throw new RuntimeException("User not found with id: " + id);
         }
     }
-
+    public long getUserCount() {
+        return userRepository.countByDeleteStatusFalse(); // Return the count of active users
+    }
     // Get User by ID
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);

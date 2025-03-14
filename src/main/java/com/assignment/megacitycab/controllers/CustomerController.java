@@ -51,6 +51,11 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    @GetMapping("/count")
+    public ResponseEntity<Long> getUserCount() {
+        long count = customerService.getCustomerCount();
+        return ResponseEntity.ok(count);
+    }
 
 
 }
