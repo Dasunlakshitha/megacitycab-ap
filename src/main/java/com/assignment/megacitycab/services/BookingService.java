@@ -33,6 +33,10 @@ public class BookingService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    public long getTotalBookings() {
+        return bookingRepository.countByDeleteStatusFalse();
+    }
+
     public Booking saveBooking(BookingDTO bookingDTO) {
         Booking booking = new Booking();
         System.out.println(bookingDTO.getCustomerId());
