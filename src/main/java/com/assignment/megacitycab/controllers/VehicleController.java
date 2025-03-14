@@ -51,4 +51,10 @@ public class VehicleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping({"/count"})
+    public ResponseEntity<Long> countVehicles() {
+        long count = vehicleService.vehicleCount();
+        return ResponseEntity.ok(count);
+    }
 }

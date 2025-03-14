@@ -25,6 +25,9 @@ public class CustomerService {
 
         return customerRepository.save(customer);
     }
+    public  long getCustomerCount() {
+        return customerRepository.countByDeleteStatusFalse();
+    }
 
     // Get Customer by ID
     public Optional<Customer> getCustomerById(Long id) {

@@ -51,4 +51,9 @@ public class DriverController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    @GetMapping({"/count"})
+    public ResponseEntity<Long> getDriverCount() {
+        long count = driverService.totalDrivers();
+        return ResponseEntity.status(HttpStatus.OK).body(count);
+    }
 }

@@ -54,4 +54,8 @@ public class VehicleService {
             throw new RuntimeException("Vehicle not found with id: " + id);
         }
     }
+
+    public long vehicleCount() {
+        return vehicleRepository.countByDeleteStatusFalse();
+    }
 }
