@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.assignment.megacitycab.models.Payment" %>
 <!DOCTYPE html>
@@ -42,27 +42,43 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                 <% List<Payment> payments = (List<Payment>) request.getAttribute("payments"); %>
-                <% if(payments != null) {
+                <% if (payments != null) {
                     for (Payment payment : payments) {
                 %>
                 <tr>
-                    <td class="px-6 py-4"><%= payment.getPaymentID() %></td>
-                    <td class="px-6 py-4"><%= payment.getBooking().getId() %></td>
-                    <td class="px-6 py-4"><%= payment.getAmount() %></td>
-                    <td class="px-6 py-4"><%= payment.getPaymentMethod() %></td>
-                    <td class="px-6 py-4"><%= payment.getStatus() %></td>
+                    <td class="px-6 py-4"><%= payment.getPaymentID() %>
+                    </td>
+                    <td class="px-6 py-4"><%= payment.getBooking().getId() %>
+                    </td>
+                    <td class="px-6 py-4"><%= payment.getAmount() %>
+                    </td>
+                    <td class="px-6 py-4"><%= payment.getPaymentMethod() %>
+                    </td>
+                    <td class="px-6 py-4"><%= payment.getStatus() %>
+                    </td>
                     <td class="px-6 py-4">
                         <a href="/edit-payment/<%= payment.getPaymentID() %>"
                            class="text-blue-500 hover:text-blue-700 mr-2">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="/delete-payment/<%= payment.getPaymentID() %>"
-                           class="text-red-500 hover:text-red-700">
+                           class="text-red-500 hover:text-red-700 mr-2">
                             <i class="fas fa-trash"></i>
                         </a>
+                        <% if ("COMPLETED".equals(payment.getStatus())) { %>
+                        <a href="/api/bookings/generate-pdf/<%= payment.getBooking().getId() %>"
+                           class="text-blue-500 hover:text-blue-700">
+                            <i class="fas fa-print"></i>
+                        </a>
+                        <% } else { %>
+                        <span class="text-gray-400 cursor-not-allowed">
+                <i class="fas fa-print"></i>
+            </span>
+                        <% } %>
                     </td>
                 </tr>
-                <% }} %>
+                <% }
+                } %>
                 </tbody>
             </table>
         </div>

@@ -82,10 +82,10 @@
                            class="text-red-500 hover:text-red-700 mr-2">
                             <i class="fas fa-trash"></i>
                         </a>
-                        <a href="/api/bookings/generate-pdf/<%= booking.getId() %>"
+                      <%--  <a href="/api/bookings/generate-pdf/<%= booking.getId() %>"
                            class="text-black-200 hover:text-blue-700 ">
                             <i class="fas fa-print"></i>
-                        </a>
+                        </a>--%>
 
                     </td>
                 </tr>
